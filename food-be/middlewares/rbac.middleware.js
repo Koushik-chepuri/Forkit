@@ -1,6 +1,6 @@
-export const restrictTo = (...roles) => (req, res, next) => {
-  if (!roles.includes(req.user.role)) {
-    return res.status(403).json({ message: "Access denied" });
+export function allowCheckout(req, res, next) {
+  if (req.user.role === "Admin" || req.user.role === "Manager") {
+    return next();
   }
-  next();
-};
+  return res.status(403).json({ message: "Members cannot checkout orders" });
+}
