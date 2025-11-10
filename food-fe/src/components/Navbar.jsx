@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
-import "../styling/navbar.css";
+import "../styling/Navbar.css";
 
 export default function Navbar() {
   const { isAuthed, logout } = useAuth();
