@@ -76,14 +76,17 @@ npm run dev
 
 **Base URL:**
 https://food-app-backend-zqmn.onrender.com/api
-**Method**	  **Endpoint**	               **Purpose**	                   **Who**
-POST	       /auth/login	                 Login and get token	           Anyone
-GET	         /restaurants	                 Get restaurant list	           Logged-in
-GET	         /orders	                     Get user’s orders	             Logged-in
-POST	       /orders	                     Place new order	               Logged-in
-PATCH	       /orders/:id	                 Cancel an order	               Admin / Manager
-PATCH	       /orders/:id/method	           Change payment method	         Admin only
-GET	         /orders/all	                 View every order	               Admin only
+
+## 🔗 API Endpoints
+| Method | Endpoint              | Purpose                   | Access           |
+|--------|-----------------------|---------------------------|------------------|
+| POST   | /auth/login           | Login (returns JWT)       | Public           |
+| GET    | /restaurants          | Get list of restaurants   | Logged-in user   |
+| GET    | /orders               | Get user's own orders     | Logged-in user   |
+| POST   | /orders               | Place a new order         | Logged-in user   |
+| PATCH  | /orders/:id           | Cancel an order           | Admin / Manager  |
+| PATCH  | /orders/:id/method    | Change payment method     | Admin only       |
+| GET    | /orders/all           | View all orders           | Admin only       |
 
 Authorization: Bearer <token>
 
