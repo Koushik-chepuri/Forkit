@@ -6,56 +6,69 @@ import { formatPrice } from "../utils/currency";
 
 export default function ManageOrders() {
   const { user } = useAuth();
-  const [orders, setOrders] = useState([]);
-  const API = import.meta.env.VITE_API_BASE;
+    const [orders, setOrders] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const API = import.meta.env.VITE_API_BASE;
 
-  useEffect(() => {
-    async function fetchOrders() {
-      const token = localStorage.getItem("token");
-      const res = await axios.get(`${API}/orders/all`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setOrders(res.data.data);
-    }
-    fetchOrders();
-  }, []);
+    useEffect(() => {
+      async function fetchOrders() {
+        try {
+          const token = localStorage.getItem("token");
+          const res = await axios.get(`${API}/orders/all`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setOrders(res.data.data);
+        } catch (err) {
+          console.log(err);
+        } finally {
+          setLoading(false);
+        }
+      }
+      fetchOrders();
+    }, []);
 
-  const updatePayment = async (id, paymentMethod) => {
-    try {
-      const token = localStorage.getItem("token");
-      await axios.patch(
-        `${API}/orders/${id}/method`,
-        { paymentMethod },
-        { headers: { Authorization: `Bearer ${token}` } }
+    const updatePayment = async (id, paymentMethod) => {
+      try {
+        const token = localStorage.getItem("token");
+        await axios.patch(
+          `${API}/orders/${id}/method`,
+          { paymentMethod },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        setOrders((prev) =>
+          prev.map((o) => (o._id === id ? { ...o, paymentMethod } : o))
+        );
+      } catch (err) {
+        console.log(err.response?.data || err);
+      }
+    };
+
+    const cancelOrder = async (id) => {
+      try {
+        const token = localStorage.getItem("token");
+        await axios.patch(
+          `${API}/orders/${id}`,
+          { status: "CANCELLED" },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        setOrders((prev) =>
+          prev.map((o) => (o._id === id ? { ...o, status: "CANCELLED" } : o))
+        );
+      } catch (err) {
+        console.log(err.response?.data || err);
+      }
+    };
+
+    if (!user || user.role !== "Admin") return <h2>Access Denied</h2>;
+    if (loading)
+      return (
+        <div className="full-loader">
+          <div className="loader"></div>
+        </div>
       );
-
-      setOrders((prev) =>
-        prev.map((o) => (o._id === id ? { ...o, paymentMethod } : o))
-      );
-    } catch (err) {
-      console.log(err.response?.data || err);
-    }
-  };
-
-  const cancelOrder = async (id) => {
-    try {
-      const token = localStorage.getItem("token");
-      await axios.patch(
-        `${API}/orders/${id}`,
-        { status: "CANCELLED" },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      setOrders((prev) =>
-        prev.map((o) => (o._id === id ? { ...o, status: "CANCELLED" } : o))
-      );
-    } catch (err) {
-      console.log(err.response?.data || err);
-    }
-  };
-
-  if (!user || user.role !== "Admin") return <h2>Access Denied</h2>;
-
+    
   return (
     <div className="manage-orders-container">
       <h2>Manage Orders</h2>

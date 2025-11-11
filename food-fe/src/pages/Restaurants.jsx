@@ -60,7 +60,11 @@ export default function Restaurants() {
     setFiltered(result);
   }
 
-  if (loading) return <div className="loading">Loading restaurants...</div>;
+  if (loading) return (
+  <div className="full-loader">
+    <div className="loader"></div>
+  </div>
+    );
 
   const cuisines = [
     "All",

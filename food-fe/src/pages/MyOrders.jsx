@@ -27,9 +27,11 @@ export default function MyOrders() {
   const handleCancel = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`${API}/orders/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.patch(
+        `${API}/orders/${id}`,
+        { status: "CANCELLED" },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
       setOrders((prev) =>
         prev.map((o) => (o._id === id ? { ...o, status: "CANCELLED" } : o))
@@ -38,7 +40,6 @@ export default function MyOrders() {
       console.log(err.response?.data || err);
     }
   };
-
 
   return (
     <div className="orders-container">
