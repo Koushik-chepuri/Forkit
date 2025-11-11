@@ -11,7 +11,7 @@ export default function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("member");
+  const [role, setRole] = useState("Member");
   const [country, setCountry] = useState("India");
   const [err, setErr] = useState("");
 
