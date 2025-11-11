@@ -89,6 +89,3 @@ https://food-app-backend-zqmn.onrender.com/api
 | GET    | /orders/all           | View all orders           | Admin only       |
 
 Authorization: Bearer <token>
-
-git clone <repo-url>
-cd food-app
