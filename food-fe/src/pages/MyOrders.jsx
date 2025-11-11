@@ -7,12 +7,13 @@ import "../styling/MyOrders.css";
 export default function MyOrders() {
   const { user } = useAuth();
   const [orders, setOrders] = useState([]);
+  const API = import.meta.env.VITE_API_BASE;
 
   useEffect(() => {
     async function fetchOrders() {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/api/orders", {
-        headers: { Authorization: `Bearer ${token}` }
+      const res = await axios.get(`${API}/orders`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
       setOrders(res.data.data);
     }
@@ -24,21 +25,19 @@ export default function MyOrders() {
   const canCancel = user.role === "Admin" || user.role === "Manager";
 
   const handleCancel = async (id) => {
-  try {
-    const token = localStorage.getItem("token");
-    await axios.delete(`http://localhost:5000/api/orders/${id}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`${API}/orders/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-    setOrders((prev) =>
-      prev.map((o) =>
-        o._id === id ? { ...o, status: "CANCELLED" } : o
-      )
-    );
-  } catch (err) {
-    console.log(err.response?.data || err);
-  }
-};
+      setOrders((prev) =>
+        prev.map((o) => (o._id === id ? { ...o, status: "CANCELLED" } : o))
+      );
+    } catch (err) {
+      console.log(err.response?.data || err);
+    }
+  };
 
 
   return (

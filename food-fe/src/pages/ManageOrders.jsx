@@ -7,12 +7,13 @@ import { formatPrice } from "../utils/currency";
 export default function ManageOrders() {
   const { user } = useAuth();
   const [orders, setOrders] = useState([]);
+  const API = import.meta.env.VITE_API_BASE;
 
   useEffect(() => {
     async function fetchOrders() {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/api/orders/all", {
-        headers: { Authorization: `Bearer ${token}` }
+      const res = await axios.get(`${API}/orders/all`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
       setOrders(res.data.data);
     }
@@ -23,13 +24,13 @@ export default function ManageOrders() {
     try {
       const token = localStorage.getItem("token");
       await axios.patch(
-        `http://localhost:5000/api/orders/${id}/method`,
+        `${API}/orders/${id}/method`,
         { paymentMethod },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      setOrders(prev =>
-        prev.map(o => (o._id === id ? { ...o, paymentMethod } : o))
+      setOrders((prev) =>
+        prev.map((o) => (o._id === id ? { ...o, paymentMethod } : o))
       );
     } catch (err) {
       console.log(err.response?.data || err);
@@ -39,13 +40,14 @@ export default function ManageOrders() {
   const cancelOrder = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/orders/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await axios.patch(
+        `${API}/orders/${id}`,
+        { status: "CANCELLED" },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-      // Update UI immediately
-      setOrders(prev =>
-        prev.map(o => (o._id === id ? { ...o, status: "CANCELLED" } : o))
+      setOrders((prev) =>
+        prev.map((o) => (o._id === id ? { ...o, status: "CANCELLED" } : o))
       );
     } catch (err) {
       console.log(err.response?.data || err);
@@ -72,7 +74,7 @@ export default function ManageOrders() {
         </thead>
 
         <tbody>
-          {orders.map(order => (
+          {orders.map((order) => (
             <tr key={order._id}>
               <td>{order.restaurant?.name}</td>
               <td>{order.user?.email}</td>
@@ -88,12 +90,11 @@ export default function ManageOrders() {
                     className="payment-select"
                     value={order.paymentMethod}
                     onChange={(e) => updatePayment(order._id, e.target.value)}
-                    >
+                  >
                     <option value="COD">COD</option>
                     <option value="UPI">UPI</option>
                     <option value="CARD">CARD</option>
-                    </select>
-
+                  </select>
                 ) : (
                   <span className="no-change">—</span>
                 )}
@@ -101,7 +102,10 @@ export default function ManageOrders() {
 
               <td>
                 {order.status !== "CANCELLED" ? (
-                  <button className="btn-cancel" onClick={() => cancelOrder(order._id)}>
+                  <button
+                    className="btn-cancel"
+                    onClick={() => cancelOrder(order._id)}
+                  >
                     Cancel
                   </button>
                 ) : (
@@ -111,7 +115,6 @@ export default function ManageOrders() {
             </tr>
           ))}
         </tbody>
-
       </table>
     </div>
   );

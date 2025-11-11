@@ -1,13 +1,14 @@
 .orders-container {
   max-width: 1100px;
-  margin: 60px auto;
+  margin: 30px auto;
   padding: 0 24px;
+  padding-bottom: 80px;
 }
 
 .orders-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 24px;
+  gap: 18px;
 }
 
 
@@ -23,7 +24,7 @@
   background: #f3ecd7; 
   border-radius: 12px;
   padding: 18px 22px;
-  margin-bottom: 18px;
+  /* margin-bottom: 18px; */
   box-shadow: 0px 1px 4px rgba(0,0,0,0.15);
   border: 1px solid #e1dcc9;
 }
@@ -74,7 +75,7 @@
 .btn-cancel {
   margin-top: 18px;
   background: #a73232;
-  color: #fff;
+  color: #ffffff25;
   border: none;
   padding: 8px 14px;
   border-radius: 6px;
@@ -104,6 +105,10 @@
   box-shadow: 0px 2px 6px rgba(0,0,0,0.08);
   border-left: 6px solid #6c7a33; 
   transition: transform 0.18s ease, box-shadow 0.18s ease;
+  /* display: flex; */
+  flex-direction: column;
+  justify-content: space-between;
+  height: 240px;
 }
 
 .order-card:hover {
@@ -131,7 +136,8 @@
 
 .items-list {
   margin-top: 14px;
-  max-height: 80px; 
+  min-height: 80px;       
+  max-height: 80px;  
   overflow-y: auto;
   padding-right: 6px; 
   scrollbar-width: thin; 

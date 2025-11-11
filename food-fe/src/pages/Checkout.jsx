@@ -12,6 +12,7 @@ export default function Checkout() {
   const { cart, total } = useCart();
   const [method, setMethod] = useState(null);
   const [restaurantName, setRestaurantName] = useState("");
+  const API = import.meta.env.VITE_API_BASE;
 
   const restaurantId = cart[0]?.restaurantId;
 
@@ -21,10 +22,9 @@ export default function Checkout() {
     async function fetchRestaurant() {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get(
-          `http://localhost:5000/api/restaurants/${restaurantId}`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        const res = await axios.get(`${API}/restaurants/${restaurantId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setRestaurantName(res.data.data.name);
       } catch (err) {
         console.log("Failed to load restaurant:", err);

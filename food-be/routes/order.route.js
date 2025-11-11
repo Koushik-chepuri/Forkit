@@ -22,7 +22,7 @@ router.patch(
   updatePaymentStatus
 );
 router.patch("/:id/method", protect, authorize("Admin"), updatePaymentMethod);
-router.delete("/:id", protect, authorize("Admin", "Manager"), cancelOrder);
+router.patch("/:id", protect, authorize("Admin", "Manager"), cancelOrder);
 
 
 export default router;

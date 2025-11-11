@@ -9,12 +9,13 @@ export default function Restaurants() {
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [selectedCuisine, setSelectedCuisine] = useState("All");
+  const API = import.meta.env.VITE_API_BASE;
 
   useEffect(() => {
     async function getRestaurants() {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/restaurants", {
+        const res = await axios.get(`${API}/restaurants`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
 

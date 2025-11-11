@@ -10,22 +10,21 @@ export default function RestaurantMenu({ setLoginOpen }) {
   const { id } = useParams();
   const { cart, addToCart, increaseQty, decreaseQty, clearCart } = useCart();
   const { user } = useAuth();
-  const [restaurant, setRestaurant] = useState(null);
-  const navigate = useNavigate();
+    const [restaurant, setRestaurant] = useState(null);
+    const API = import.meta.env.VITE_API_BASE;
 
-  useEffect(() => {
-    async function fetchMenu() {
-      const token = localStorage.getItem("token");
-      const res = await axios.get(
-        `http://localhost:5000/api/restaurants/${id}`,
-        {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      async function fetchMenu() {
+        const token = localStorage.getItem("token");
+        const res = await axios.get(`${API}/restaurants/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      setRestaurant(res.data.data);
-    }
-    fetchMenu();
-  }, [id]);
+        });
+        setRestaurant(res.data.data);
+      }
+      fetchMenu();
+    }, [id]);
 
   useEffect(() => {
     clearCart();
