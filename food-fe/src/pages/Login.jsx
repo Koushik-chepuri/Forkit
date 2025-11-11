@@ -10,9 +10,11 @@ export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+    const [loading, setLoading] = useState(false);
+    
   const handleSubmit = async (e) => {
-    e.preventDefault();
+      e.preventDefault();
+      setLoading(true);
     try {
       const res = await axios.post("/auth/login", { email, password });
       const { token, user } = res.data;
@@ -20,6 +22,8 @@ export default function Login() {
       navigate("/restaurants");
     } catch (err) {
       alert("Incorrect credentials. Try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,7 +62,13 @@ export default function Login() {
             New here? <a href="/signup">Create an account</a>
           </p>
         </div>
-      </div>
+          </div>
+          
+        {loading && (
+          <div className="page-dim">
+              <div className="loader"></div>
+          </div>
+        )}
     </>
   );
 }

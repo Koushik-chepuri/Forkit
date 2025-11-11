@@ -7,39 +7,51 @@ import { useAuth } from "../context/AuthContext";
 import "../styling/RestaurantMenu.css";
 
 export default function RestaurantMenu({ setLoginOpen }) {
-  const { id } = useParams();
-  const { cart, addToCart, increaseQty, decreaseQty, clearCart } = useCart();
-  const { user } = useAuth();
+    const { id } = useParams();
+    const { cart, addToCart, increaseQty, decreaseQty, clearCart } = useCart();
+    const { user } = useAuth();
     const [restaurant, setRestaurant] = useState(null);
+    const [loading, setLoading] = useState(true);
     const API = import.meta.env.VITE_API_BASE;
 
     const navigate = useNavigate();
 
     useEffect(() => {
       async function fetchMenu() {
-        const token = localStorage.getItem("token");
-        const res = await axios.get(`${API}/restaurants/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setRestaurant(res.data.data);
+        try {
+          const token = localStorage.getItem("token");
+          const res = await axios.get(`${API}/restaurants/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setRestaurant(res.data.data);
+        } catch (err) {
+          console.log(err);
+        } finally {
+          setLoading(false);
+        }
       }
       fetchMenu();
     }, [id]);
 
-  useEffect(() => {
-    clearCart();
-  }, [id]);
+    useEffect(() => {
+      clearCart();
+    }, [id]);
 
-  const placeOrder = () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setLoginOpen(true);
-      return;
-    }
-    navigate(`/checkout?restaurant=${restaurant._id}`);
-  };
+    const placeOrder = () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setLoginOpen(true);
+        return;
+      }
+      navigate(`/checkout?restaurant=${restaurant._id}`);
+    };
 
-  if (!restaurant) return <h2 className="loading">Loading menu...</h2>;
+    if (loading)
+      return (
+        <div className="full-loader">
+          <div className="loader"></div>
+        </div>
+      );
 
   return (
     <div className="menu-layout">
