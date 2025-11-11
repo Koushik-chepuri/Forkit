@@ -1,16 +1,17 @@
+/* LOGIN PAGE - OLIVE + BEIGE THEME */
 
 .auth-page {
   display: flex;
   justify-content: center;
   align-items: center;
   height: calc(100vh - 60px);
-  background: var(--bg-page); 
+  background: var(--bg-page); /* same as app background */
   padding: 20px;
 }
 
 .auth-card {
   width: 380px;
-  background: var(--bg-card); 
+  background: var(--bg-card); /* same card color as navbar */
   padding: 32px;
   border-radius: 14px;
   box-shadow: 0 8px 26px rgba(0,0,0,0.08);
@@ -51,6 +52,7 @@
   outline: none;
 }
 
+/* EXACT SAME BUTTON BEHAVIOR AS .primary-action + .signup-btn */
 .auth-btn {
   display: inline-block;
   padding: 12px;
@@ -83,29 +85,4 @@
 
 .auth-alt a:hover {
   opacity: 0.75;
-}
-
-.password-field {
-  position: relative;
-}
-
-.password-field .auth-input {
-  padding-right: 42px; 
-}
-
-.toggle-eye {
-  position: absolute;
-  right: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.25s ease;
-}
-
-.toggle-eye:hover {
-  color: var(--text-main);
 }
