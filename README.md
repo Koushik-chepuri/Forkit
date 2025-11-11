@@ -61,7 +61,7 @@ Smooth flow. No hidden nonsense.
 ## 💻 Run Locally (if needed)
 
 ```bash
-git clone https://github.com/Koushik-chepuri/Food-App
+git clone https://github.com/Koushik-chepuri/Forkit
 cd food-app
 
 **Backend**
